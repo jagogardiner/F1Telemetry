@@ -107,12 +107,14 @@ namespace F1Telemetry
             public float m_frontWheelsAngle;           // Current front wheels angle in radians
         };
 
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public struct MarshalZone
         {
             public float m_zoneStart;   // Fraction (0..1) of way through the lap the marshal zone starts
             public sbyte m_zoneFlag;    // -1 = invalid/unknown, 0 = none, 1 = green, 2 = blue, 3 = yellow, 4 = red
         };
 
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public struct WeatherForecastSample
         {
             public byte m_sessionType;                     // 0 = unknown, 1 = P1, 2 = P2, 3 = P3, 4 = Short P, 5 = Q1
@@ -125,6 +127,7 @@ namespace F1Telemetry
             public sbyte m_airTemperature;                  // Air temp. in degrees celsius
         };
 
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public struct PacketSessionData
         {
             PacketHeader m_header;                    // Header
@@ -159,6 +162,7 @@ namespace F1Telemetry
             WeatherForecastSample[] m_weatherForecastSamples;   // Array of weather forecast samples
         };
 
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public struct LapData
         {
             public float m_lastLapTime;               // Last lap time in seconds
@@ -199,6 +203,7 @@ namespace F1Telemetry
                                                // 6 = retired
         };
 
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public struct PacketLapData
         {
             PacketHeader m_header;             // Header
@@ -206,27 +211,32 @@ namespace F1Telemetry
             LapData[] m_lapData;        // Lap data for all cars on track
         };
 
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public struct FastestLap
         {
             public byte vehicleIdx; // Vehicle index of car achieving fastest lap
             public float lapTime;    // Lap time is in seconds
         };
 
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public struct Retirement
         {
             public byte vehicleIdx; // Vehicle index of car retiring
         };
 
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public struct TeamMateInPits
         {
             public byte vehicleIdx; // Vehicle index of team mate
         };
 
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public struct RaceWinner
         {
             public byte vehicleIdx; // Vehicle index of team mate
         };
 
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public struct Penalty
         {
             public byte penaltyType;          // Penalty type – see Appendices
@@ -238,6 +248,7 @@ namespace F1Telemetry
             public byte placesGained;         // Number of places gained by this
         };
 
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public struct SpeedTrap
         {
             public byte vehicleIdx; // Vehicle index of the vehicle triggering speed trap
@@ -277,6 +288,7 @@ namespace F1Telemetry
             public EventDataDetails eventDataDetails;
         };
 
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
         struct ParticipantData
         {
             public byte m_aiControlled;           // Whether the vehicle is AI (1) or Human (0) controlled
@@ -290,6 +302,7 @@ namespace F1Telemetry
             public byte m_yourTelemetry;          // The player's UDP setting, 0 = restricted, 1 = public
         };
 
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
         struct PacketParticipantsData
         {
             public PacketHeader m_header;           // Header
@@ -300,6 +313,7 @@ namespace F1Telemetry
             public ParticipantData[] m_participants;
         };
 
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
         struct CarSetupData
         {
             public byte m_frontWing;                // Front wing aero
@@ -326,6 +340,7 @@ namespace F1Telemetry
             public float m_fuelLoad;                 // Fuel load
         };
 
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
         struct PacketCarSetupData
         {
             public PacketHeader m_header;            // Header
@@ -334,6 +349,7 @@ namespace F1Telemetry
             public CarSetupData[] m_carSetups;
         };
 
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
         struct CarTelemetryData
         {
             public short m_speed;                         // Speed of car in kilometres per hour
@@ -358,6 +374,7 @@ namespace F1Telemetry
             public byte[] m_surfaceType;                // Driving surface, see appendices
         };
 
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
         struct PacketCarTelemetryData
         {
             public PacketHeader m_header;         // Header
@@ -378,6 +395,7 @@ namespace F1Telemetry
                                         // 0 if no gear suggested
         };
 
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
         struct CarStatusData
         {
             public byte m_tractionControl;          // 0 (off) - 2 (high)
@@ -431,6 +449,7 @@ namespace F1Telemetry
             public float m_ersDeployedThisLap;       // ERS energy deployed this lap
         };
 
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
         struct PacketCarStatusData
         {
             public PacketHeader m_header;           // Header
@@ -439,6 +458,7 @@ namespace F1Telemetry
             public CarStatusData[] m_carStatusData;
         };
 
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
         struct FinalClassificationData
         {
             public byte m_position;              // Finishing position
@@ -459,6 +479,8 @@ namespace F1Telemetry
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
             public byte[] m_tyreStintsVisual;   // Visual tyres used by this driver
         };
+
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
         struct PacketFinalClassificationData
         {
             public PacketHeader m_header;                             // Header
@@ -468,6 +490,7 @@ namespace F1Telemetry
             public FinalClassificationData[] m_classificationData;
         };
 
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
         struct LobbyInfoData
         {
             public byte m_aiControlled;            // Whether the vehicle is AI (1) or Human (0) controlled
@@ -479,6 +502,7 @@ namespace F1Telemetry
             public byte m_readyStatus;             // 0 = not ready, 1 = ready, 2 = spectating
         };
 
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
         struct PacketLobbyInfoData
         {
             public PacketHeader m_header;                       // Header
