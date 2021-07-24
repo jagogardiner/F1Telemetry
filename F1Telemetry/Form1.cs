@@ -13,11 +13,13 @@ using System.Net.Sockets;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
+using EnvDTE;
+using EnvDTE80;
 
 namespace F1Telemetry
 {
     public partial class Form1 : Form
-    {   
+    {
         public Form1()
         {
             InitializeComponent();
@@ -43,13 +45,23 @@ namespace F1Telemetry
                 try
                 {
                     byte[] rec = Client.Receive(ref RemoteIP);
-                    TelemetryStructures.PacketHeader packetID = ByteArrayToStructure<TelemetryStructures.PacketHeader>(rec);
-                    switch (packetID.m_packetId)
+                    ReadOnlySpan<byte> Bytes = rec;
+                    var header = MemoryMarshal.Cast<byte, TelemetryStructures.PacketHeader>(Bytes)[0];
+                    Bytes = Bytes.Slice(Unsafe.SizeOf<TelemetryStructures.PacketHeader>());
+                    switch (header.m_packetId)
                     {
                         case TelemetryStructures.PacketType.CarTelemetry:
+                            int carIndex = 0;
+                            foreach (var telemetry in MemoryMarshal.Cast<byte, TelemetryStructures.CarTelemetryData>(Bytes))
+                            {
+                                Console.WriteLine($"car: {carIndex}, gear: {telemetry.m_gear}, speed: {telemetry.m_speed}");
+                                carIndex++;
+                            }
+                            Console.WriteLine();
+                            System.Threading.Thread.Sleep(500);
+                            Console.Clear();
                             break;
                     }
-                    System.Threading.Thread.Sleep(500);
 
                 }
                 catch (Exception ex)
