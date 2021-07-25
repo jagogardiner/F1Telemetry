@@ -289,7 +289,7 @@ namespace F1Telemetry
         };
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        struct ParticipantData
+        public struct ParticipantData
         {
             public byte m_aiControlled;           // Whether the vehicle is AI (1) or Human (0) controlled
             public byte m_driverId;               // Driver id - see appendix
@@ -303,7 +303,7 @@ namespace F1Telemetry
         };
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        struct PacketParticipantsData
+        public struct PacketParticipantsData
         {
             public PacketHeader m_header;           // Header
 
@@ -314,7 +314,7 @@ namespace F1Telemetry
         };
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        struct CarSetupData
+        public struct CarSetupData
         {
             public byte m_frontWing;                // Front wing aero
             public byte m_rearWing;                 // Rear wing aero
@@ -341,7 +341,7 @@ namespace F1Telemetry
         };
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        struct PacketCarSetupData
+        public struct PacketCarSetupData
         {
             public PacketHeader m_header;            // Header
 
@@ -350,7 +350,7 @@ namespace F1Telemetry
         };
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        struct CarTelemetryData
+        public struct CarTelemetryData
         {
             public short m_speed;                         // Speed of car in kilometres per hour
             public float m_throttle;                      // Amount of throttle applied (0.0 to 1.0)
@@ -375,7 +375,7 @@ namespace F1Telemetry
         };
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        struct PacketCarTelemetryData
+        public struct PacketCarTelemetryData
         {
             public PacketHeader m_header;         // Header
 
@@ -396,7 +396,7 @@ namespace F1Telemetry
         };
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        struct CarStatusData
+        public struct CarStatusData
         {
             public byte m_tractionControl;          // 0 (off) - 2 (high)
             public byte m_antiLockBrakes;           // 0 (off) - 1 (on)
@@ -450,7 +450,7 @@ namespace F1Telemetry
         };
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        struct PacketCarStatusData
+        public struct PacketCarStatusData
         {
             public PacketHeader m_header;           // Header
 
@@ -459,7 +459,7 @@ namespace F1Telemetry
         };
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        struct FinalClassificationData
+        public struct FinalClassificationData
         {
             public byte m_position;              // Finishing position
             public byte m_numLaps;               // Number of laps completed
@@ -481,7 +481,7 @@ namespace F1Telemetry
         };
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        struct PacketFinalClassificationData
+        public struct PacketFinalClassificationData
         {
             public PacketHeader m_header;                             // Header
 
@@ -491,7 +491,7 @@ namespace F1Telemetry
         };
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        struct LobbyInfoData
+        public struct LobbyInfoData
         {
             public byte m_aiControlled;            // Whether the vehicle is AI (1) or Human (0) controlled
             public byte m_teamId;                  // Team id - see appendix (255 if no team currently selected)
@@ -503,7 +503,7 @@ namespace F1Telemetry
         };
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        struct PacketLobbyInfoData
+        public struct PacketLobbyInfoData
         {
             public PacketHeader m_header;                       // Header
 

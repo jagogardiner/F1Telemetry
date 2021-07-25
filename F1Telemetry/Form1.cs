@@ -23,10 +23,18 @@ namespace F1Telemetry
         public Form1()
         {
             InitializeComponent();
-            var Client = new UdpClient(20777);
-            var RemoteIP = new IPEndPoint(IPAddress.Any, 60420);
-
             F1Telemetry f1 = new F1Telemetry(20777);
+
+            while (true)
+            {
+                try
+                {
+                    F1Telemetry.UpdateTelemetry(f1.packetCarTelemetryData);
+                }
+                catch (Exception e){
+
+                }
+            }
         }
     }
 }
