@@ -11,7 +11,7 @@ using static F1Telemetry.TelemetryStructures;
 
 namespace F1Telemetry
 {
-    public class F1Telemetry : Form1
+    public class F1Telemetry
     {
         // public packet data objects
         // for debugging until I figure these structures out completely
