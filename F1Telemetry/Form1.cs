@@ -24,14 +24,17 @@ namespace F1Telemetry
         {
             InitializeComponent();
             F1Telemetry f1 = new F1Telemetry(20777);
-
             while (true)
             {
+                Console.CursorVisible = false;
+                f1.UpdatePlayerTelemetry();
+
+                // report tyre data:
                 try
                 {
-                    F1Telemetry.UpdateTelemetry(f1.packetCarTelemetryData);
                 }
-                catch (Exception e){
+                catch (Exception ex)
+                {
 
                 }
             }

@@ -79,10 +79,10 @@ namespace F1Telemetry
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public struct PacketMotionData
         {
-            PacketHeader m_header;                  // Header
+            public PacketHeader m_header;                  // Header
 
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 22)]
-            CarMotionData[] m_carMotionData;      // Data for all cars on track
+            public CarMotionData[] m_carMotionData;      // Data for all cars on track
 
             // Extra player car ONLY data
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
@@ -206,9 +206,9 @@ namespace F1Telemetry
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public struct PacketLapData
         {
-            PacketHeader m_header;             // Header
+            public PacketHeader m_header;             // Header
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 22)]
-            LapData[] m_lapData;        // Lap data for all cars on track
+            public LapData[] m_lapData;        // Lap data for all cars on track
         };
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -454,7 +454,7 @@ namespace F1Telemetry
         {
             public PacketHeader m_header;           // Header
 
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 22)]
             public CarStatusData[] m_carStatusData;
         };
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -10,38 +11,27 @@ using static F1Telemetry.TelemetryStructures;
 
 namespace F1Telemetry
 {
-    public class F1Telemetry
+    public class F1Telemetry : Form1
     {
         // public packet data objects
         // for debugging until I figure these structures out completely
-        PacketHeader packetHeader;
-        CarMotionData carMotionData;
-        PacketMotionData packetMotionData;
-        MarshalZone marshalZone;
-        WeatherForecastSample weatherForecastSample;
-        PacketSessionData packetSessionData;
-        LapData lapData;
-        PacketLapData packetLapData;
-        FastestLap fastestLap;
-        Retirement retirement;
-        TeamMateInPits teamMateInPits;
-        RaceWinner raceWinner;
-        Penalty penalty;
-        SpeedTrap speedTrap;
-        EventDataDetails eventDataDetails;
-        PacketEventData packetEventData;
-        ParticipantData participantData;
-        PacketParticipantsData packetParticipantsData;
-        CarSetupData carSetupData;
-        PacketCarSetupData packetCarSetupData;
-        CarTelemetryData carTelemetryData;
+        public PacketHeader packetHeader;
+        public PacketMotionData packetMotionData;
+        public PacketSessionData packetSessionData;
+        public PacketLapData packetLapData;
+        public PacketEventData packetEventData;
+        public PacketParticipantsData packetParticipantsData;
+        public PacketCarSetupData packetCarSetupData;
         public PacketCarTelemetryData packetCarTelemetryData;
-        CarStatusData carStatusData;
-        PacketCarStatusData packetCarStatusData;
-        FinalClassificationData finalClassificationData;
-        PacketFinalClassificationData packetFinalClassificationData;
-        LobbyInfoData lobbyInfoData;
-        PacketLobbyInfoData packetLobbyInfoData;
+        public PacketCarStatusData packetCarStatusData;
+        public PacketFinalClassificationData packetFinalClassificationData;
+        public PacketLobbyInfoData packetLobbyInfoData;
+
+        public CarTelemetryData playerCarTelemetryData = new CarTelemetryData();
+        public CarStatusData playerCarStatusData = new CarStatusData();
+        public CarSetupData playerCarSetupData = new CarSetupData();
+        public LapData playerLapData = new LapData();
+        public CarMotionData playerCarMotionData = new CarMotionData();
 
         private UdpClient udpClient;
         private IPEndPoint ipEndPoint;
@@ -66,7 +56,7 @@ namespace F1Telemetry
 
             try
             {
-                PacketHeader packetHeader = (PacketHeader)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(PacketHeader));
+                packetHeader = (PacketHeader)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(PacketHeader));
                 switch (packetHeader.m_packetId)
                 {
                     case PacketType.CarSetups:
@@ -97,6 +87,7 @@ namespace F1Telemetry
             }
             catch (Exception ex)
             {
+                Debug.WriteLine("Failed to recieve packet");
             }
             finally
             {
@@ -104,27 +95,63 @@ namespace F1Telemetry
             }
         }
 
-        public static void UpdateTelemetry(PacketCarTelemetryData packet)
+        // Right now just getting player Telemetry
+        public void UpdatePlayerTelemetry()
         {
-            int playerIndex = packet.m_header.m_playerCarIndex;
-            try
-            {
-                CarTelemetryData playerData = packet.m_carTelemetryData[playerIndex];
+            // Get player index
+            int playerIndex = packetHeader.m_playerCarIndex;
 
-                Console.SetCursorPosition(0, 0);
-                Console.WriteLine($"Throttle (linear 0 - 1): {playerData.m_throttle}".PadRight(Console.WindowWidth, ' '));
-                Console.WriteLine($"Brake (linear 0 - 1): {playerData.m_brake}".PadRight(Console.WindowWidth, ' '));
-                Console.WriteLine($"Steering (-1 - 1): {playerData.m_steer}".PadRight(Console.WindowWidth, ' '));
-                Console.WriteLine($"Speed (km/h): {playerData.m_speed}".PadRight(Console.WindowWidth, ' '));
-                Console.WriteLine($"RPM: {playerData.m_engineRPM}".PadRight(Console.WindowWidth, ' '));
-                Console.WriteLine($"Gear (0 - 7): {playerData.m_gear}".PadRight(Console.WindowWidth, ' '));
-                Console.WriteLine($"DRS: {playerData.m_drs}".PadRight(Console.WindowWidth, ' '));
-                Console.WriteLine($"Engine temperature (deg C): {playerData.m_engineTemperature}".PadRight(Console.WindowWidth, ' '));
-                Console.WriteLine($"Session time: {packet.m_header.m_sessionTime}".PadRight(Console.WindowWidth, ' '));
-            } catch(Exception e)
+            // Update telemetry object depending on new packet ID
+            switch (packetHeader.m_packetId)
             {
-
+                case PacketType.CarTelemetry:
+                    playerCarTelemetryData = packetCarTelemetryData.m_carTelemetryData[playerIndex];
+                    break;
+                case PacketType.CarStatus:
+                    playerCarStatusData = packetCarStatusData.m_carStatusData[playerIndex];
+                    break;
+                case PacketType.CarSetups:
+                    playerCarSetupData = packetCarSetupData.m_carSetups[playerIndex];
+                    break;
+                case PacketType.LapData:
+                    playerLapData = packetLapData.m_lapData[playerIndex];
+                    break;
+                case PacketType.Motion:
+                    playerCarMotionData = packetMotionData.m_carMotionData[playerIndex];
+                    break;
             }
+
+            //if(packet.m_header.m_packetId == PacketType.CarTelemetry)
+            //{
+            //    int playerIndex = packet.m_header.m_playerCarIndex;
+            //    CarTelemetryData playerData = packet.m_carTelemetryData[playerIndex];
+
+            //    string gear = "";
+
+            //    if(playerData.m_gear > packet.m_suggestedGear && packet.m_suggestedGear != 0)
+            //    {
+            //        gear = playerData.m_gear + " v " +"("+packet.m_suggestedGear+")";
+            //    } else if(playerData.m_gear < packet.m_suggestedGear && packet.m_suggestedGear != 0)
+            //    {
+            //        gear = playerData.m_gear + " ^ " + "(" + packet.m_suggestedGear + ")";
+            //    }
+            //    else
+            //    {
+            //        gear = playerData.m_gear.ToString();
+            //    }
+
+            //    Console.SetCursorPosition(0, 0);
+            //    Console.WriteLine($"Throttle (linear 0 - 1): {playerData.m_throttle}".PadRight(Console.WindowWidth, ' '));
+            //    Console.WriteLine($"Brake (linear 0 - 1): {playerData.m_brake}".PadRight(Console.WindowWidth, ' '));
+            //    Console.WriteLine($"Steering (-1 - 1): {playerData.m_steer}".PadRight(Console.WindowWidth, ' '));
+            //    Console.WriteLine($"Speed (km/h): {playerData.m_speed}".PadRight(Console.WindowWidth, ' '));
+            //    Console.WriteLine($"RPM: {playerData.m_engineRPM}".PadRight(Console.WindowWidth, ' '));
+            //    Console.WriteLine($"Gear (-1 - 8): {gear}".PadRight(Console.WindowWidth, ' '));
+            //    Console.WriteLine($"DRS: {playerData.m_drs}".PadRight(Console.WindowWidth, ' '));
+            //    Console.WriteLine($"Engine temperature (deg C): {playerData.m_engineTemperature}".PadRight(Console.WindowWidth, ' '));
+            //    Console.WriteLine($"Session time: {packet.m_header.m_sessionTime}".PadRight(Console.WindowWidth, ' '));
+            //    Console.WriteLine($"Suggested Gear: {packet.m_suggestedGear}".PadRight(Console.WindowWidth, ' '));
+            //}
         }
     }
 }
